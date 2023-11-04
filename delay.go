@@ -11,12 +11,12 @@ const MaxConcurrentG = 3
 
 type DelayParam struct {
 	Duration  int64
-	fun       any
-	funcParam []reflect.Value
+	Fun       any
+	FuncParam []reflect.Value
 
-	methodName     string
-	obj            any
-	methodParam    []reflect.Value
+	MethodName     string
+	Obj            any
+	MethodParam    []reflect.Value
 	methodCallback func(any)
 }
 
@@ -86,21 +86,21 @@ func (d *Delay) process() {
 						<-d.concurrentChan
 					}()
 
-					if currDelay.obj != nil && len(currDelay.methodName) > 0 {
-						obj := reflect.ValueOf(currDelay.obj)
-						m := obj.MethodByName(currDelay.methodName)
+					if currDelay.Obj != nil && len(currDelay.MethodName) > 0 {
+						obj := reflect.ValueOf(currDelay.Obj)
+						m := obj.MethodByName(currDelay.MethodName)
 						if !m.IsValid() {
-							log.Printf("method %s invalid", currDelay.methodName)
+							log.Printf("method %s invalid", currDelay.MethodName)
 							return
 						}
-						m.Call(currDelay.methodParam)
+						m.Call(currDelay.MethodParam)
 					} else {
-						f := reflect.ValueOf(currDelay.fun)
+						f := reflect.ValueOf(currDelay.Fun)
 						if !f.IsValid() {
-							log.Printf("func %s invalid", currDelay.methodName)
+							log.Printf("func %s invalid", currDelay.MethodName)
 							return
 						}
-						f.Call(currDelay.funcParam)
+						f.Call(currDelay.FuncParam)
 					}
 				}()
 			}
@@ -129,17 +129,17 @@ func (d *Delay) DelayAdd(param *DelayParam) {
 func (d *Delay) AddFunc(duration int64, fun any, funcParam []reflect.Value) {
 	d.DelayAdd(&DelayParam{
 		Duration:  duration,
-		fun:       fun,
-		funcParam: funcParam,
+		Fun:       fun,
+		FuncParam: funcParam,
 	})
 }
 
 func (d *Delay) AddMethod(duration int64, obj any, methodName string, methodParam []reflect.Value) {
 	d.DelayAdd(&DelayParam{
 		Duration:    duration,
-		obj:         obj,
-		methodName:  methodName,
-		methodParam: methodParam,
+		Obj:         obj,
+		MethodName:  methodName,
+		MethodParam: methodParam,
 	})
 }
 

@@ -21,4 +21,9 @@ delay.DelayAdd(&DelayParam{
     },
 })
 
+// wait for delay execute 
+for {
+
+}
+
 ```
