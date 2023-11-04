@@ -21,7 +21,7 @@ type DelayParam struct {
 }
 
 type Delay struct {
-	delayEntries   map[int64][]*DelayParam
+	delayEntities  map[int64][]*DelayParam
 	tk             *time.Ticker
 	mu             sync.Mutex
 	stopChan       chan struct{}
@@ -57,7 +57,7 @@ func (d *Delay) Start() {
 
 func (d *Delay) Stop() {
 	d.clearTicker()
-	d.delayEntries = nil
+	d.delayEntities = nil
 }
 
 func (d *Delay) process() {
@@ -65,9 +65,9 @@ func (d *Delay) process() {
 	defer func() {
 		d.mu.Unlock()
 	}()
-	for callTime, delayList := range d.delayEntries {
+	for callTime, delayList := range d.delayEntities {
 		if time.Now().Unix() >= callTime {
-			delete(d.delayEntries, callTime)
+			delete(d.delayEntities, callTime)
 			curr := delayList
 			for _, delay := range curr {
 				currDelay := delay
@@ -112,16 +112,16 @@ func (d *Delay) DelayAdd(param *DelayParam) {
 		d.mu.Unlock()
 	}()
 
-	if d.delayEntries == nil {
-		d.delayEntries = make(map[int64][]*DelayParam)
+	if d.delayEntities == nil {
+		d.delayEntities = make(map[int64][]*DelayParam)
 	}
-	_, ok := d.delayEntries[param.Duration]
+	_, ok := d.delayEntities[param.Duration]
 	if ok {
-		d.delayEntries[param.Duration] = append(d.delayEntries[param.Duration], param)
+		d.delayEntities[param.Duration] = append(d.delayEntities[param.Duration], param)
 	} else {
-		d.delayEntries[param.Duration] = []*DelayParam{param}
+		d.delayEntities[param.Duration] = []*DelayParam{param}
 	}
-	log.Printf("delay entry : %+v", d.delayEntries)
+	log.Printf("delay entry : %+v", d.delayEntities)
 }
 
 func (d *Delay) AddFunc(duration int64, fun any, funcParam []reflect.Value) {
