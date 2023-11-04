@@ -16,8 +16,8 @@ delay.Start()
 
 delay.DelayAdd(&DelayParam{
     Duration: time.Now().Add(time.Second * time.Duration(r)).Unix(),
-    fun: func() {
-        log.Println("hello world1", i)
+    Fun: func() {
+        log.Println("hello world")
     },
 })
 

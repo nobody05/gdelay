@@ -32,7 +32,7 @@ func TestConcurrentDelay(t *testing.T) {
 		r := rand.Intn(10) + 1
 		delay.DelayAdd(&DelayParam{
 			Duration: time.Now().Add(time.Second * time.Duration(r)).Unix(),
-			fun: func() {
+			Fun: func() {
 				log.Println("hello world1", i)
 			},
 		})
@@ -49,14 +49,14 @@ func TestDelay(t *testing.T) {
 
 	globalDelay.DelayAdd(&DelayParam{
 		Duration: time.Now().Add(time.Second * 3).Unix(),
-		fun: func() {
+		Fun: func() {
 			log.Println("hello world1")
 		},
 	})
 
 	globalDelay.DelayAdd(&DelayParam{
 		Duration: time.Now().Add(time.Second * 6).Unix(),
-		fun: func() {
+		Fun: func() {
 			log.Println("hello world panic")
 			panic("inner panic")
 		},
@@ -64,37 +64,37 @@ func TestDelay(t *testing.T) {
 
 	globalDelay.DelayAdd(&DelayParam{
 		Duration: time.Now().Add(time.Second * 10).Unix(),
-		fun: func(name string) {
+		Fun: func(name string) {
 			println("name: ", name)
 			log.Println("hello world1")
 		},
-		funcParam: []reflect.Value{reflect.ValueOf("Tom")},
+		FuncParam: []reflect.Value{reflect.ValueOf("Tom")},
 	})
 
 	globalDelay.DelayAdd(&DelayParam{
 		Duration: time.Now().Add(time.Second * 3).Unix(),
-		fun: func() {
+		Fun: func() {
 			time.Sleep(time.Second * 3)
 			log.Println("hello world 2")
 		},
 	})
 	globalDelay.DelayAdd(&DelayParam{
 		Duration: time.Now().Add(time.Second * 3).Unix(),
-		fun: func() {
+		Fun: func() {
 			log.Println("hello world3")
 		},
 	})
 	globalDelay.DelayAdd(&DelayParam{
 		Duration:   time.Now().Add(time.Second * 5).Unix(),
-		obj:        &Order{},
-		methodName: "GetList",
+		Obj:        &Order{},
+		MethodName: "GetList",
 	})
 
 	globalDelay.DelayAdd(&DelayParam{
 		Duration:    time.Now().Add(time.Second * 5).Unix(),
-		obj:         &Order{},
-		methodName:  "GetInfo",
-		methodParam: []reflect.Value{reflect.ValueOf("12")},
+		Obj:         &Order{},
+		MethodName:  "GetInfo",
+		MethodParam: []reflect.Value{reflect.ValueOf("12")},
 	})
 
 	globalDelay.AddFunc(time.Now().Add(time.Second).Unix(), func(name string) {
