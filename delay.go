@@ -56,9 +56,7 @@ func (d *Delay) Start() {
 }
 
 func (d *Delay) Stop() {
-	if d.tk != nil {
-		d.tk.Stop()
-	}
+	d.clearTicker()
 	d.delayEntries = nil
 }
 
