@@ -121,7 +121,7 @@ func (d *Delay) DelayAdd(param *DelayParam) {
 	} else {
 		d.delayEntities[param.Duration] = []*DelayParam{param}
 	}
-	log.Printf("delay entry : %+v", d.delayEntities)
+	log.Printf("delay entity : %+v", d.delayEntities)
 }
 
 func (d *Delay) AddFunc(duration int64, fun any, funcParam []reflect.Value) {
