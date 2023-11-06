@@ -95,7 +95,7 @@ func (d *Delay) process() {
 					} else {
 						f := reflect.ValueOf(currDelay.Fun)
 						if !f.IsValid() {
-							log.Printf("func %s invalid", currDelay.MethodName)
+							log.Printf("func %+v invalid", currDelay.Fun)
 							return
 						}
 						f.Call(currDelay.FuncParam)
